@@ -45,17 +45,14 @@ if __name__ == "__main__":
     train_y = train[["quality"]]
     test_y = test[["quality"]]
 
-    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.6
-    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.6
+    alpha = 0.6
+    l1_ratio = 0.6
     
     # Set the uri to the remote MLFlow server
     mlflow.set_tracking_uri('https://mlflow.ds.us-east-1.shipt.com/')
 
-    #### Create a new experiment if one does not already exist ####
-    # mlflow.create_experiment('ML roundtable demo1')
-
     # If an experiment already exists, set the experiment to the experiment ID
-    mlflow.set_experiment('ML roundtable demo1')
+    mlflow.set_experiment('ML roundtable')
 
     with mlflow.start_run():
         # Log hyperparameters to mlflow
