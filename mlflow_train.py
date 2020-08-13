@@ -12,9 +12,10 @@ from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import ElasticNet
 from urllib.parse import urlparse
+from loguru import logger
+
 import mlflow
 import mlflow.sklearn
-from loguru import logger
 
 def eval_metrics(actual, pred):
     rmse = np.sqrt(mean_squared_error(actual, pred))
@@ -48,6 +49,13 @@ if __name__ == "__main__":
     alpha = 0.6
     l1_ratio = 0.6
     
+    lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
+    lr.fit(train_x, train_y)
+
+    predicted_qualities = lr.predict(test_x)
+
+    (rmse, mae, r2) = eval_metrics(test_y, predicted_qualities)        
+
     # Set the uri to the remote MLFlow server
     mlflow.set_tracking_uri('https://mlflow.ds.us-east-1.shipt.com/')
 
@@ -59,12 +67,6 @@ if __name__ == "__main__":
         mlflow.log_param("alpha", alpha)
         mlflow.log_param("l1_ratio", l1_ratio)
         
-        lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
-        lr.fit(train_x, train_y)
-
-        predicted_qualities = lr.predict(test_x)
-
-        (rmse, mae, r2) = eval_metrics(test_y, predicted_qualities)        
         # Log our performance metrics to mlflow
         mlflow.log_metric("rmse", rmse)
         mlflow.log_metric("r2", r2)
