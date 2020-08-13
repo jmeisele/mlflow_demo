@@ -1,7 +1,7 @@
 """
 Author: Jason Eisele
 Email: jeisele@shipt.com
-Date: Augusut 1, 2020
+Date: August 1, 2020
 """
 import os
 import warnings

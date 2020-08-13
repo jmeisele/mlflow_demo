@@ -45,17 +45,17 @@ if __name__ == "__main__":
     train_y = train[["quality"]]
     test_y = test[["quality"]]
 
-    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.4
-    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.6
+    alpha = float(sys.argv[1]) if len(sys.argv) > 1 else 0.5
+    l1_ratio = float(sys.argv[2]) if len(sys.argv) > 2 else 0.5
     
     # Set the uri to the remote MLFlow server
     mlflow.set_tracking_uri('https://mlflow.ds.us-east-1.shipt.com/')
 
     #### Create a new experiment if one does not already exist ####
-    mlflow.create_experiment('This is a demo Experiment')
+    # mlflow.create_experiment('ML roundtable demo1')
 
     # If an experiment already exists, set the experiment to the experiment ID
-    # mlflow.set_experiment('This is a demo Experiment')
+    mlflow.set_experiment('ML roundtable demo1')
 
     with mlflow.start_run():
         # Log hyperparameters to mlflow
@@ -73,12 +73,16 @@ if __name__ == "__main__":
         mlflow.log_metric("r2", r2)
         mlflow.log_metric("mae", mae)
 
-        tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
+        # Log our trained model as an artifact
+        mlflow.sklearn.log_model(lr, "model")
+    
+        # tracking_url_type_store = urlparse(mlflow.get_tracking_uri()).scheme
+    
 
         # Model registry does not work with file store
-        if tracking_url_type_store != "file":
+        # if tracking_url_type_store != "file":
 
             # Log our model to mlflow
-            mlflow.sklearn.log_model(lr, "model", registered_model_name="ElasticnetWineModel")
-        else:
-            mlflow.sklearn.log_model(lr, "model")
+            # mlflow.sklearn.log_model(lr, "model", registered_model_name="ElasticnetWineModel")
+        # else:
+            # mlflow.sklearn.log_model(lr, "model")
