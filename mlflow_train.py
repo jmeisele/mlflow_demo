@@ -46,8 +46,8 @@ if __name__ == "__main__":
     train_y = train[["quality"]]
     test_y = test[["quality"]]
 
-    alpha = 0.6
-    l1_ratio = 0.6
+    alpha = 0.5
+    l1_ratio = 0.7
     
     lr = ElasticNet(alpha=alpha, l1_ratio=l1_ratio, random_state=42)
     lr.fit(train_x, train_y)
